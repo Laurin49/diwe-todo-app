@@ -1,6 +1,8 @@
 package info.diwe.todoapp.model;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Size;
 import java.util.Objects;
 
 @Entity
@@ -11,6 +13,8 @@ public class Todo {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
+    @NotBlank(message = "Der Name des Todos darf nicht leer bleiben ...")
+    @Size(min = 3, max = 50, message = "Der Name des Todos muss zwischen 3 und 50 Zeichen enthalten ...")
     private String name;
     private String beschreibung;
 

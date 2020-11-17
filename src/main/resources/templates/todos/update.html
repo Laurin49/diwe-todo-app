@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>Todo ändern</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
+
+    <div class="row justify-content-center pt-1">
+        <div class="col-md-10">
+            <form th:object="${todo}" th:action="@{/todos/update}"
+                  method="post">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <div class="card-title">Todo Update</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col col-md-6 form-group">
+                                    <label>Todo-Name:</label>
+                                    <input type="text"
+                                           class="form-control" th:field="*{name}" />
+                                    <span style="color: red; font-size: bold"
+                                          th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                                            Exercise-Name Error
+                                     </span>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col col-md-6 form-group">
+                                    <label>Beschreibung:</label>
+                                    <textarea class="form-control" rows="4" th:field="*{beschreibung}"></textarea>
+                                    <span class="error" th:if="${#fields.hasErrors('beschreibung')}"
+                                          th:errors="*{beschreibung}"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary pr-2 tooltip-test" title="Abbrechen"
+                               th:href="@{'/todos/list'}">
+                                Zurück
+                            </a>
+                            <button type="submit"
+                                    class="btn btn-primary pr-2 tooltip-test" title="Senden">Speichern</button>
+                        </div>
+                    </div>
+                    <!-- card -->
+                </div>
+                <!-- form-group -->
+            </form>
+            <!-- form -->
+        </div>
+    </div>
+</div>
+</body>
+</html>
