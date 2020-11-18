@@ -1,6 +1,8 @@
 package info.diwe.todoapp.bootstrap;
 
+import info.diwe.todoapp.model.Category;
 import info.diwe.todoapp.model.Todo;
+import info.diwe.todoapp.service.CategoryService;
 import info.diwe.todoapp.service.TodoService;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -12,9 +14,11 @@ import java.util.List;
 public class DataLoader implements CommandLineRunner {
     
     private TodoService todoService;
+    private CategoryService categoryService;
 
-    public DataLoader(TodoService todoService) {
+    public DataLoader(TodoService todoService, CategoryService categoryService) {
         this.todoService = todoService;
+        this.categoryService = categoryService;
     }
 
     @Override
@@ -24,6 +28,26 @@ public class DataLoader implements CommandLineRunner {
         if (todos.size() == 0) {
             initTodoData();
         }
+        List<Category> categories = new ArrayList<>();
+        categoryService.readCategories().iterator().forEachRemaining(categories::add);
+        if (categories.size() == 0) {
+            initCategoryData();
+        }
+    }
+
+    private void initCategoryData() {
+        Category category1 = new Category("App Development");
+        categoryService.createCategory(category1);
+        Category category2 = new Category("Bücher lesen");
+        categoryService.createCategory(category2);
+        Category category3 = new Category("Aufgaben privat");
+        categoryService.createCategory(category3);
+        Category category4 = new Category("Spring Boot");
+        categoryService.createCategory(category4);
+        Category category5 = new Category("Java Path");
+        categoryService.createCategory(category5);
+        Category category6 = new Category("OOP and Design Pattern");
+        categoryService.createCategory(category6);
     }
 
     private void initTodoData() {

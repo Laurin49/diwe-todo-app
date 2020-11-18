@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>Category ändern</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+    <div th:if="${message}" th:text="${message}" th:class="${'alert ' + alertClass}"></div>
+    <div class="row justify-content-center pt-1">
+        <div class="col-md-10">
+            <form th:object="${category}" th:action="@{/categories/update}"
+                  method="post">
+                <input type="hidden" th:field="*{id}" />
+                <div class="form-group">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="d-flex justify-content-between">
+                                <div class="card-title">Category Update</div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col col-md-6 form-group">
+                                    <label>Category-Name:</label>
+                                    <input type="text"
+                                           class="form-control" th:field="*{name}" />
+                                    <span style="color: #ff0000; font-size: bold"
+                                          th:if="${#fields.hasErrors('name')}" th:errors="*{name}">
+                                        Category-Name Error
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-footer">
+                            <a href="#" class="btn btn-primary pr-2 tooltip-test" title="Zurück"
+                               th:href="@{'/categories/list'}">
+                                Zurück
+                            </a>
+                            <button type="submit"
+                                    class="btn btn-primary pr-2 tooltip-test" title="Senden">Speichern</button>
+                        </div>
+                    </div>
+                    <!-- card -->
+                </div>
+                <!-- form-group -->
+            </form>
+            <!-- form -->
+        </div>
+    </div>
+</div>
+</body>
+</html>

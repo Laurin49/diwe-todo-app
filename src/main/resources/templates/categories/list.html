@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{common/layout}">
+<head>
+    <title>Kategorie - Liste</title>
+</head>
+<body>
+<div layout:fragment="content" th:remove="tag">
+
+    <div class="row justify-content-center pt-1">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-header">
+                    <div class="d-flex justify-content-between">
+                        <div class="card-title">Kategorieliste</div>
+                    </div>
+                </div>
+                <div class="card-body">
+                    <div class="form-row pb-2">
+                        <div class="col-md-auto">
+                            <a role="button" class="btn btn-primary mt-1 tooltip-test"
+                               title="Add Category"
+                               th:href="@{'/categories/add'}">
+                                <i class="fa fa-plus"></i> New
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row justify-content-center pt-1">
+        <div class="col-md-10">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive"
+                         th:if="${not #lists.isEmpty(categories)}">
+                        <table class="table table-hover table-sm">
+                            <thead class="thead-light">
+                            <tr>
+                                <th>Name</th>
+                                <th style="text-align: center">Update</th>
+                                <th style="text-align: center">Delete</th>
+                            </tr>
+                            </thead>
+                            <tr th:each="category : ${categories}">
+                                <td th:text="${category.name}"></td>
+                                <td style="text-align: center">
+                                    <a href="#" class="tooltip-test" title="Edit Category"
+                                       th:href="@{/categories/update/{id}(id=${category.id})}">
+                                        <i class="fa fa-pencil-alt"></i>
+                                    </a>
+                                </td>
+                                <td style="text-align: center">
+                                    <a href="#" class="tooltip-test" data-placement="right" title="Delete Category"
+                                       data-toggle="modal"
+                                       data-target="#modal-warning"
+                                       th:attr="data-target='#modal-warning'+${category.id}">
+                                        <i class="fa fa-trash"></i>
+                                    </a>
+                                    <div th:replace="categories/category_delete_modal_dialog :: category-delete-modal-dialog"></div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:unless="${!categories.isEmpty()}">
+        <h4 class="display-4">Es gibt noch keine Einträge ...</h4>
+    </div>
+
+</div>
+</body>
+</html>
