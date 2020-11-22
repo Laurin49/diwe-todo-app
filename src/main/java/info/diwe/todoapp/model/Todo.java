@@ -19,6 +19,8 @@ public class Todo {
 
     @Size(min = 3, max = 50, message = "Der Name des Todos muss zwischen 3 und 50 Zeichen enthalten ...")
     private String name;
+
+    @Column(columnDefinition = "TEXT")
     private String beschreibung;
 
     @Min(value = 1, message = "Der Wert von Priorität sollte mindestens 1 haben ...")

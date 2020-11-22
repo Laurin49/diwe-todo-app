@@ -3,8 +3,10 @@ package info.diwe.todoapp.repository;
 import info.diwe.todoapp.model.Category;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.Calendar;
 import java.util.List;
 
 public interface CategoryRepository extends JpaRepository<Category, Long> {
     Category findByName(String name);
+    Category findFirstBy();
 }

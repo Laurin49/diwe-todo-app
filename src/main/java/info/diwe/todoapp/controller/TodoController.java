@@ -39,7 +39,8 @@ public class TodoController {
         selCategories = new ArrayList<>();
 
         filterCategory = new FilterCategory();
-        filterCategory.setFilterCategory("Alle");
+        Category category = categoryService.findFirstBy();
+        filterCategory.setFilterCategory(category.getName());
     }
 
     @GetMapping("/list")
@@ -87,7 +88,7 @@ public class TodoController {
 
     private List<Todo> holeTodos(String filter) {
         if (filter.equals("Alle")) {
-            return todoService.readTodos();
+           return todoService.readTodos();
         } else {
             return todoService.findByCategoryName(filter);
         }

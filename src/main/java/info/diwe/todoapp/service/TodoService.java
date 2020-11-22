@@ -15,4 +15,5 @@ public interface TodoService {
     Todo updateTodo(Todo todo);
     void deleteTodo(Long id);
     List<Todo> findByCategoryName(String name);
+    List<Todo> findFirstByCategory(Category category);
 }

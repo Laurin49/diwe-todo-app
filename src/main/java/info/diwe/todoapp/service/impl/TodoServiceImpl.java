@@ -95,4 +95,9 @@ public class TodoServiceImpl implements TodoService {
         return todoRepository.findByCategory_NameOrderByPrioritaetAsc(name);
     }
 
+    @Override
+    public List<Todo> findFirstByCategory(Category category) {
+        return todoRepository.findFirstByCategory(category);
+    }
+
 }
