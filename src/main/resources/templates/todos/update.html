@@ -33,9 +33,18 @@
                                             Exercise-Name Error
                                      </span>
                                 </div>
+                                <div class="col col-md-2 form-group">
+                                    <label>Priorität:</label>
+                                    <input type="number" step="1" min="1" max="9"
+                                           class="form-control" th:field="*{prioritaet}" />
+                                    <span style="color: red; font-weight: bold"
+                                          th:if="${#fields.hasErrors('prioritaet')}"
+                                          th:errors="*{prioritaet}">Priorität Error
+                                    </span>
+                                </div>
                             </div>
                             <div class="row">
-                                <div class="col col-md-6 form-group">
+                                <div class="col col-md-8 form-group">
                                     <label>Beschreibung:</label>
                                     <textarea class="form-control" rows="4" th:field="*{beschreibung}"></textarea>
                                     <span class="error" th:if="${#fields.hasErrors('beschreibung')}"
