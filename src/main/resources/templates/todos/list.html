@@ -17,15 +17,28 @@
                     </div>
                 </div>
                 <div class="card-body">
-                    <div class="form-row pb-2">
-                        <div class="col-md-auto">
-                            <a role="button" class="btn btn-primary mt-1 tooltip-test"
-                               title="Add Exercise"
-                               th:href="@{'/todos/add'}">
-                                <i class="fa fa-plus"></i> New
-                            </a>
+                    <form th:object="${filterCategory}" th:action="@{/todos/filter}"
+                          method="post">
+                        <div class="form-row pb-2">
+                            <div class="col col-md-3">
+                                <select th:field="*{filterCategory}" class="form-control">
+                                    <option th:each="cat: ${selCategories}" th:value="${cat}"
+                                            th:text="${cat}"></option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <button type="submit" class="btn btn-primary tooltip-test"
+                                        title="Filter">Filter</button>
+                            </div>
+                            <div class="col-md-auto">
+                                <a role="button" class="btn btn-primary mt-1 tooltip-test"
+                                   title="Add Exercise"
+                                   th:href="@{'/todos/add'}">
+                                    <i class="fa fa-plus"></i> New
+                                </a>
+                            </div>
                         </div>
-                    </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -40,15 +53,19 @@
                         <table class="table table-hover table-sm">
                             <thead class="thead-light">
                             <tr>
+                                <th>Kategorie</th>
                                 <th>Name</th>
+                                <th>Prior</th>
                                 <th>Beschreibung</th>
                                 <th style="text-align: center">Update</th>
                                 <th style="text-align: center">Delete</th>
                             </tr>
                             </thead>
                             <tr th:each="todo : ${todos}">
-                                <td th:text="${todo.name}"></td>
-                                <td th:text="${todo.beschreibung}"></td>
+                                <td th:text="${todo.getCategory().getName()}" style="min-width: 100px;"></td>
+                                <td th:text="${todo.name}" style="min-width: 100px;"></td>
+                                <td th:text="${todo.prioritaet}" style="min-width: 50px; text-align: center"></td>
+                                <td th:text="${todo.beschreibung}" style="max-width: 350px;"></td>
                                 <td style="text-align: center">
                                     <a href="#" class="tooltip-test" title="Edit Todo"
                                        th:href="@{/todos/update/{id}(id=${todo.id})}">
@@ -73,7 +90,15 @@
     </div>
 
     <div th:unless="${!todos.isEmpty()}">
-        <h4 class="display-4">Es gibt noch keine Einträge ...</h4>
+        <div class="row justify-content-center pt-1">
+            <div class="col-md-10">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="display-4">Es gibt noch keine Einträge ...</h4>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 </div>

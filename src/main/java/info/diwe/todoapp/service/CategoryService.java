@@ -11,5 +11,7 @@ public interface CategoryService {
     Category createCategory(Category category);
     Category updateCategory(Category category);
     void deleteCategory(Long id);
+    Category findByName(String name);
+    Category findFirstBy();
 
 }

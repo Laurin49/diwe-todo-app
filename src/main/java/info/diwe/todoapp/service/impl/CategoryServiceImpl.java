@@ -57,4 +57,14 @@ public class CategoryServiceImpl implements CategoryService {
         }
         categoryRepository.deleteById(id);
     }
+
+    @Override
+    public Category findByName(String name) {
+        return categoryRepository.findByName(name);
+    }
+
+    @Override
+    public Category findFirstBy() {
+        return categoryRepository.findFirstBy();
+    }
 }
