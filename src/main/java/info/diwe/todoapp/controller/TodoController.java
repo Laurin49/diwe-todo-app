@@ -1,6 +1,9 @@
 package info.diwe.todoapp.controller;
 
+import info.diwe.todoapp.model.Category;
 import info.diwe.todoapp.model.Todo;
+import info.diwe.todoapp.model.filter.FilterCategory;
+import info.diwe.todoapp.service.CategoryService;
 import info.diwe.todoapp.service.TodoService;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -17,24 +20,79 @@ import java.util.List;
 public class TodoController {
 
     private TodoService todoService;
-    private List<Todo> todos;
+    private CategoryService categoryService;
 
-    public TodoController(TodoService todoService) {
+    private List<Todo> todos;
+    private List<Category> categories;
+    private List<String> selCategories;
+    private FilterCategory filterCategory;
+
+    public TodoController(TodoService todoService, CategoryService categoryService) {
         this.todoService = todoService;
+        this.categoryService = categoryService;
     }
 
     @PostConstruct
     public void init() {
         todos = new ArrayList<>();
+        categories = new ArrayList<>();
+        selCategories = new ArrayList<>();
+
+        filterCategory = new FilterCategory();
+        filterCategory.setFilterCategory("Alle");
     }
 
     @GetMapping("/list")
     public ModelAndView getTodoList(ModelAndView modelAndView) {
-        todos = getTodoList();
+        categories.clear();
+        selCategories.clear();
+        categoryService.readCategories().iterator().forEachRemaining(categories::add);
+        for (Category category: categories) {
+            selCategories.add(category.getName());
+        }
+
+        todos = holeTodos(filterCategory.getFilterCategory());
+
+        selCategoriesContainsAlle();
+
+        modelAndView.addObject("filterCategory", filterCategory);
+        modelAndView.addObject("selCategories", selCategories);
         modelAndView.addObject("todos", todos);
         modelAndView.setViewName("todos/list");
         return modelAndView;
     }
+
+    @PostMapping("/filter")
+    public ModelAndView getTodosFiltered(@ModelAttribute FilterCategory m_filterCategory, ModelAndView modelAndView) {
+        filterCategory.setFilterCategory(m_filterCategory.getFilterCategory());
+
+        todos = holeTodos(filterCategory.getFilterCategory());
+
+        selCategoriesContainsAlle();
+
+
+
+        modelAndView.addObject("filterCategory", filterCategory);
+        modelAndView.addObject("selCategories", selCategories);
+        modelAndView.addObject("todos", todos);
+        modelAndView.setViewName("todos/list");
+        return modelAndView;
+    }
+
+    private void selCategoriesContainsAlle() {
+        if (!selCategories.contains("Alle")) {
+            selCategories.add(0, "Alle");
+        }
+    }
+
+    private List<Todo> holeTodos(String filter) {
+        if (filter.equals("Alle")) {
+            return todoService.readTodos();
+        } else {
+            return todoService.findByCategoryName(filter);
+        }
+    }
+
 
     @GetMapping("/add")
     public ModelAndView addTodoGet(ModelAndView modelAndView) {
@@ -50,7 +108,9 @@ public class TodoController {
             modelAndView = showMsg("add", todo, "Fehler beim Speichern des Todo ...", false, modelAndView);
             return modelAndView;
         }
-        todoService.createTodo(todo);
+
+        todoService.createTodoByCategory(categoryService.findByName(filterCategory.getFilterCategory()), todo);
+
         modelAndView = showMsg("add", todo, "Todo erfolgreich hinzugefügt ...", true, modelAndView);
         return modelAndView;
     }
@@ -70,7 +130,12 @@ public class TodoController {
             modelAndView = showMsg("update", todo, "Fehler beim Speichern des Todo ...", false, modelAndView);
             return modelAndView;
         }
-        todoService.updateTodo(todo);
+        if (filterCategory.getFilterCategory().equals("Alle")) {
+            modelAndView = showMsg("update", todo, "Kategorie nicht selektiert - Updaten nicht möglich ...", false, modelAndView);
+            return modelAndView;
+        }
+        todoService.updateTodoByCategory(categoryService.findByName(filterCategory.getFilterCategory()), todo);
+
         modelAndView = showMsg("add", todo, "Todo erfolgreich geändert ...", true, modelAndView);
         return modelAndView;
     }
@@ -84,6 +149,8 @@ public class TodoController {
         } else {
             modelAndView.addObject("alertClass", "alert-danger");
         }
+        modelAndView.addObject("filterCategory", filterCategory);
+        modelAndView.addObject("selCategories", selCategories);
         modelAndView.addObject("todo", todo);
         modelAndView.setViewName("todos/" + type);
         return modelAndView;
@@ -94,7 +161,9 @@ public class TodoController {
 
         todoService.deleteTodo(id);
 
-        todos = getTodoList();
+        todos = holeTodos(filterCategory.getFilterCategory());
+        modelAndView.addObject("filterCategory", filterCategory);
+        modelAndView.addObject("selCategories", selCategories);
         modelAndView.addObject("todos", todos);
         modelAndView.setViewName("todos/list");
         return modelAndView;
