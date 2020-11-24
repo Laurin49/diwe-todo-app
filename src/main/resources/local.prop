@@ -9,3 +9,7 @@ spring.jpa.hibernate.ddl-auto = update
 spring.jpa.properties.hibernate.dialect = org.hibernate.dialect.PostgreSQLDialect
 spring.jpa.show-sql=true
 spring.jpa.properties.hibernate.jdbc.lob.non_contextual_creation=true
+
+
+#todo.show.notErledigt = true
+#todo.show.category="DIWE-Todo-App"
