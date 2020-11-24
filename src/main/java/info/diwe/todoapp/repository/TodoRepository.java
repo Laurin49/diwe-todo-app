@@ -2,6 +2,7 @@ package info.diwe.todoapp.repository;
 
 import info.diwe.todoapp.model.Category;
 import info.diwe.todoapp.model.Todo;
+import org.hibernate.cache.spi.entry.StructuredCacheEntry;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;

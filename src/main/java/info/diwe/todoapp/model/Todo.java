@@ -27,6 +27,7 @@ public class Todo {
     @Max(value = 9, message = "Der Wert von Priorität sollte maximal bei 9 liegen ...")
     @Column(columnDefinition = "integer default 9")
     private Byte prioritaet;
+    private Boolean erledigt = null;
 
     @ManyToOne()
     @JoinColumn(name = "category_id")
@@ -70,6 +71,14 @@ public class Todo {
 
     public void setPrioritaet(Byte prioritaet) {
         this.prioritaet = prioritaet;
+    }
+
+    public Boolean getErledigt() {
+        return erledigt;
+    }
+
+    public void setErledigt(Boolean erledigt) {
+        this.erledigt = erledigt;
     }
 
     public Category getCategory() {
