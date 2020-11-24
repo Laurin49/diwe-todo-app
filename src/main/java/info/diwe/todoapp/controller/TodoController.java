@@ -5,6 +5,7 @@ import info.diwe.todoapp.model.Todo;
 import info.diwe.todoapp.model.filter.FilterCategory;
 import info.diwe.todoapp.service.CategoryService;
 import info.diwe.todoapp.service.TodoService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +28,11 @@ public class TodoController {
     private List<String> selCategories;
     private FilterCategory filterCategory;
 
+//    @Value("${todo.show.notErledigt}")
+//    private String todo_show_notErledigt;
+    // @Value("${todo.show.category}")
+//    private String todo_show_category;
+
     public TodoController(TodoService todoService, CategoryService categoryService) {
         this.todoService = todoService;
         this.categoryService = categoryService;
@@ -41,10 +47,12 @@ public class TodoController {
         filterCategory = new FilterCategory();
         Category category = categoryService.findFirstBy();
         filterCategory.setFilterCategory(category.getName());
+
     }
 
     @GetMapping("/list")
     public ModelAndView getTodoList(ModelAndView modelAndView) {
+
         categories.clear();
         selCategories.clear();
         categoryService.readCategories().iterator().forEachRemaining(categories::add);
@@ -109,7 +117,10 @@ public class TodoController {
             modelAndView = showMsg("add", todo, "Fehler beim Speichern des Todo ...", false, modelAndView);
             return modelAndView;
         }
-
+        System.out.println("Erledigt: " + todo.getErledigt());
+        if (todo.getErledigt()) {
+            todo.setPrioritaet((byte) 9);
+        }
         todoService.createTodoByCategory(categoryService.findByName(filterCategory.getFilterCategory()), todo);
 
         modelAndView = showMsg("add", todo, "Todo erfolgreich hinzugefügt ...", true, modelAndView);
@@ -134,6 +145,10 @@ public class TodoController {
         if (filterCategory.getFilterCategory().equals("Alle")) {
             modelAndView = showMsg("update", todo, "Kategorie nicht selektiert - Updaten nicht möglich ...", false, modelAndView);
             return modelAndView;
+        }
+        System.out.println("Update - Erledigt: " + todo.getErledigt());
+        if (todo.getErledigt()) {
+            todo.setPrioritaet((byte) 9);
         }
         todoService.updateTodoByCategory(categoryService.findByName(filterCategory.getFilterCategory()), todo);
 
