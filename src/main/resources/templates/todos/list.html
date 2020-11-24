@@ -55,7 +55,8 @@
                             <tr>
                                 <th>Kategorie</th>
                                 <th>Name</th>
-                                <th>Prior</th>
+                                <th style="text-align: center">Prior</th>
+                                <th style="text-align: center">Erledigt</th>
                                 <th>Beschreibung</th>
                                 <th style="text-align: center">Update</th>
                                 <th style="text-align: center">Delete</th>
@@ -63,8 +64,15 @@
                             </thead>
                             <tr th:each="todo : ${todos}">
                                 <td th:text="${todo.getCategory().getName()}" style="min-width: 100px;"></td>
-                                <td th:text="${todo.name}" style="min-width: 100px;"></td>
+
+                                <td th:if="${todo.erledigt}" th:text="${todo.name}"
+                                    style="min-width: 100px; color: red; text-decoration-line: line-through"></td>
+                                <td th:unless="${todo.erledigt}" th:text="${todo.name}" style="min-width: 100px;"></td>
+
                                 <td th:text="${todo.prioritaet}" style="min-width: 50px; text-align: center"></td>
+                                <td style="min-width: 50px; text-align: center">
+                                    <input type="checkbox" th:checked="${todo.erledigt}" th:disabled="true">
+                                </td>
                                 <td th:text="${todo.beschreibung}" style="max-width: 350px;"></td>
                                 <td style="text-align: center">
                                     <a href="#" class="tooltip-test" title="Edit Todo"

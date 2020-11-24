@@ -51,6 +51,13 @@
                                           th:errors="*{beschreibung}"></span>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col col-md-4 form-group">
+                                    <input type="checkbox" th:field="*{erledigt}"></input>
+                                    <label th:for="${#ids.next('erledigt')}"> Erledigt</label>
+                                    <span class="error" th:if="${#fields.hasErrors('erledigt')}" th:errors="*{erledigt}"></span>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <a href="#" class="btn btn-primary pr-2 tooltip-test" title="Abbrechen"
